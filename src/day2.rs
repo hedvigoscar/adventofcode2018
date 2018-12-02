@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use fxhash::FxHashMap as HashMap;
 
 #[aoc_generator(day2)]
 pub fn parse_day2(input: &str) -> Vec<String> {
@@ -47,7 +47,7 @@ pub fn solve_day2_part2(input: &[String]) -> String {
             if tested == i {
                 continue;
             }
-            let mut diffs: Vec<usize> = Default::default();
+            let mut diffs = Vec::<usize>::default();
             for (index, (c1, c2)) in tested.chars().zip(i.chars()).enumerate() {
                 if c1 != c2 {
                     diffs.push(index);

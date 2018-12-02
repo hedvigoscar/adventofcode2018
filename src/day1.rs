@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use fxhash::FxHashSet as HashSet;
 
 #[aoc_generator(day1)]
 pub fn parse_day1(input: &str) -> Vec<i32> {
@@ -12,7 +12,7 @@ pub fn solve_day1_part1(input: &[i32]) -> i32 {
 
 #[aoc(day1, part2)]
 pub fn solve_day1_part2(input: &[i32]) -> i32 {
-    let mut results: HashSet<i32> = Default::default();
+    let mut results = HashSet::<i32>::default();
     let mut state = 0;
     loop {
         for i in input {
