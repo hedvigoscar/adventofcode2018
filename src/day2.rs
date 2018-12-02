@@ -39,3 +39,30 @@ pub fn solve_day2_part1(input: &[String]) -> u32 {
     }
     n_twos * n_threes
 }
+
+#[aoc(day2, part2)]
+pub fn solve_day2_part2(input: &[String]) -> String {
+    for tested in input {
+        for i in input {
+            if tested == i {
+                continue;
+            }
+            let mut diffs: Vec<usize> = Default::default();
+            for (index, (c1, c2)) in tested.chars().zip(i.chars()).enumerate() {
+                if c1 != c2 {
+                    diffs.push(index);
+                }
+                if diffs.len() > 1 {
+                    break;
+                }
+            }
+            if diffs.len() != 1 {
+                continue;
+            }
+            let mut res = tested.clone();
+            res.remove(diffs[0]);
+            return res;
+        }
+    }
+    panic!("Did not find the right answer");
+}
