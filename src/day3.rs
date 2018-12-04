@@ -1,7 +1,7 @@
 use fxhash::FxHashMap as HashMap;
 
 pub struct Claim {
-    _id: String,
+    id: String,
     left: u32,
     top: u32,
     width: u32,
@@ -15,7 +15,7 @@ pub fn parse_day3(input: &str) -> Vec<Claim> {
         let edges = parts[2].split(',').collect::<Vec<&str>>();
         let sizes = parts[3].split('x').collect::<Vec<&str>>();
         Claim {
-            _id: parts[0].to_string(),
+            id: parts[0].to_string(),
             left: edges[0].parse().unwrap(),
             top: edges[1].trim_matches(':').parse().unwrap(),
             width: sizes[0].parse().unwrap(),
@@ -48,5 +48,45 @@ pub fn solve_day3_part1(input: &[Claim]) -> u32 {
 
 #[aoc(day3, part2)]
 pub fn solve_day3_part2(input: &[Claim]) -> String {
-    unimplemented!()
+    let mut square_inches = HashMap::<String, u32>::default();
+    let mut candidates = Vec::<&Claim>::default();
+
+    for claim in input {
+        let mut is_overlapping = false;
+        for x in claim.left..claim.left+claim.width {
+            for y in claim.top..claim.top+claim.height {
+                let coordinates = format!("{},{}", x, y);
+                let prev_count = square_inches.get(&coordinates).unwrap_or(&0);
+                if *prev_count > 1 {
+                    is_overlapping = true;
+                }
+                square_inches.insert(coordinates, prev_count + 1);
+            }
+        }
+        if !is_overlapping {
+            candidates.push(claim);
+        }
+    }
+    eprintln!("Candidates: {}", candidates.iter().map(|c| c.id.clone()).collect::<Vec<String>>().join(","));
+    for candidate in candidates {
+        let mut is_valid = true;
+        for x in candidate.left..candidate.left+candidate.width {
+            for y in candidate.top..candidate.top+candidate.height {
+                let coordinates = format!("{},{}", x, y);
+                let coordinate_count = square_inches[&coordinates];
+                if coordinate_count > 1 {
+                    is_valid = false;
+                    break;
+                }
+            }
+            if !is_valid {
+                break;
+            }
+        }
+
+        if is_valid {
+            return candidate.id.clone();
+        }
+    }
+    unreachable!();
 }
