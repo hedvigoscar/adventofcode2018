@@ -67,7 +67,6 @@ pub fn solve_day3_part2(input: &[Claim]) -> String {
             candidates.push(claim);
         }
     }
-    eprintln!("Candidates: {}", candidates.iter().map(|c| c.id.clone()).collect::<Vec<String>>().join(","));
     for candidate in candidates {
         let mut is_valid = true;
         for x in candidate.left..candidate.left+candidate.width {
