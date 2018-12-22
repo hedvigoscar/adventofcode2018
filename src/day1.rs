@@ -20,6 +20,6 @@ pub fn solve_day1_part2(input: &[i32]) -> i32 {
             if !results.insert(state) {
                 return state;
             }
-        };
+        }
     }
 }
