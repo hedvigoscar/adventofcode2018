@@ -96,3 +96,32 @@ pub fn solve_day6_part1(input: &[(u32, u32)]) -> u32 {
 
     *records[0].1
 }
+
+#[aoc(day6, part2)]
+pub fn solve_day6_part2(input: &[(u32, u32)]) -> u32 {
+    let mut finder = input.to_owned();
+    finder.sort_unstable_by(|(a, _), (b, _)| a.cmp(b));
+    let max_x = finder[finder.len() - 1].0;
+    finder.sort_unstable_by(|(_, a), (_, b)| a.cmp(b));
+    let max_y = finder[finder.len() - 1].1;
+
+    let mut region_size = 0;
+
+    for x in 0..=max_x {
+        for y in 0..=max_y {
+            let mut total = 0;
+            for i in input {
+                total += manhattan_distance(*i, (x, y));
+                if total > 10000 {
+                    break;
+                }
+            }
+
+            if total < 10000 {
+                region_size += 1;
+            }
+        }
+    }
+
+    region_size
+}
