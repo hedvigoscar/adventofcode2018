@@ -1,6 +1,6 @@
 use fxhash::FxHashMap as HashMap;
 
-pub fn react_polymer(polymer: &str) -> String {
+fn react_polymer(polymer: &str) -> String {
     let mut buffer = polymer.to_string();
     loop {
         let mut marked_for_deletion = Vec::<usize>::default();
