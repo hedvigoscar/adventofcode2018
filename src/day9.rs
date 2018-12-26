@@ -1,9 +1,10 @@
 use fxhash::FxHashMap as HashMap;
+use skiplist::skiplist::SkipList;
 
 #[derive(Debug)]
 pub struct Input {
-    n_players: u32,
-    last_marble_point_worth: u32,
+    n_players: u64,
+    last_marble_point_worth: u64,
 }
 #[aoc_generator(day9)]
 pub fn parse_day9(input: &str) -> Input {
@@ -29,21 +30,20 @@ fn circular_next_index(base: usize, length: usize) -> usize {
 }
 
 fn circular_prev_7th(base: usize, length: usize) -> usize {
-    if (base as i32) - 7 < 0 {
+    if (base as i64) - 7 < 0 {
         length - (7 - base)
     } else {
         base - 7
     }
 }
 
-#[aoc(day9, part1)]
-pub fn solve_day9_part1(input: &Input) -> u32 {
+fn solve_day9(input: &Input) -> u64 {
     let mut current_player = 1;
     let mut current_highest_marble = 0;
     let mut current_marble_position = 0;
-    let mut marbles = Vec::<u32>::default();
+    let mut marbles = SkipList::<u64>::with_capacity(input.last_marble_point_worth as usize);
 
-    let mut scores = HashMap::<u32, u32>::default();
+    let mut scores = HashMap::<u64, u64>::default();
 
     while current_highest_marble < input.last_marble_point_worth {
         if current_highest_marble > 0 && current_highest_marble % 23 == 0 {
@@ -56,7 +56,7 @@ pub fn solve_day9_part1(input: &Input) -> u32 {
             current_marble_position = ccw_7th_idx;
         } else {
             current_marble_position = circular_next_index(current_marble_position, marbles.len());
-            marbles.insert(current_marble_position, current_highest_marble);
+            marbles.insert(current_highest_marble, current_marble_position);
         }
 
         current_highest_marble += 1;
@@ -71,6 +71,19 @@ pub fn solve_day9_part1(input: &Input) -> u32 {
     scores.sort_unstable_by(|(_, a), (_, b)| b.cmp(a));
 
     *scores[0].1
+}
+
+#[aoc(day9, part1)]
+pub fn solve_day9_part1(input: &Input) -> u64 {
+    solve_day9(input)
+}
+
+#[aoc(day9, part2)]
+pub fn solve_day9_part2(input: &Input) -> u64 {
+    solve_day9(&Input {
+        n_players: input.n_players,
+        last_marble_point_worth: input.last_marble_point_worth * 100,
+    })
 }
 
 #[cfg(test)]
