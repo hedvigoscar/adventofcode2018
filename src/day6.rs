@@ -27,11 +27,9 @@ fn check_closeness(input: &[(u32, u32)], target: (u32, u32)) -> Vec<((u32, u32),
     let (x, y) = target;
     let mut distances = Vec::<((u32, u32), u32)>::default();
 
-    // eprintln!("Manhattan distances to ({}, {}):", x, y);
     for i in input {
         let current_manhattan = manhattan_distance(*i, (x, y));
         distances.push((*i, current_manhattan));
-        // eprintln!("({}, {}): {}", i.0, i.1, current_manhattan);
     }
     distances.sort_unstable_by(|(_, a), (_, b)| a.cmp(b));
     distances
