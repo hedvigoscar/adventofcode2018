@@ -90,17 +90,11 @@ fn render(input: &[PointVelocity]) -> String {
     buf
 }
 
-fn move_points(input: &[PointVelocity]) -> Vec<PointVelocity> {
-    let mut new_points = Vec::<PointVelocity>::with_capacity(input.len());
+fn move_points(input: &mut [PointVelocity]) {
     for i in input {
-        let (x, y) = i.point;
-        let (dx, dy) = i.velocity;
-        new_points.push(PointVelocity {
-            point: (x + dx, y + dy),
-            velocity: (dx, dy),
-        });
+        i.point.0 += i.velocity.0;
+        i.point.1 += i.velocity.1;
     }
-    new_points
 }
 
 fn solve_day10_inner(input: &[PointVelocity]) -> (String, u32) {
@@ -126,7 +120,7 @@ fn solve_day10_inner(input: &[PointVelocity]) -> (String, u32) {
         }
         least_distance_x = distance_x;
         counter += 1;
-        points = move_points(&points);
+        move_points(&mut points);
     }
 
     (render(&points), counter)
